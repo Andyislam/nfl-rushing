@@ -1,0 +1,25 @@
+<table data-toggle="table" id='rushingYards'>
+  <thead>
+  	<tr>
+  		<% @col_headers.each do |c| %>
+  			<th data-sortable='true'><%= c %></th>
+  		<% end %>
+  	</tr>
+  </thead>
+
+  <tbody>
+    
+  </tbody>
+</table>
+
+<script type="text/javascript">
+	$(document).ready( function () {
+		var jsonData = <%= raw @cashed_json.to_json %>
+	    var table =  $('#rushingYards').DataTable({
+	    	dom: 'Bfrtlip',
+    		buttons: [ 'copyHtml5','excelHtml5','pdfHtml5','csvHtml5' ],
+    	    data: jsonData,
+    		"order": [1, 'asc'],
+	    });
+	} );
+</script>
