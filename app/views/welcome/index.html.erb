@@ -17,7 +17,7 @@
 		var jsonData = <%= raw @cashed_json.to_json %>
 	    var table =  $('#rushingYards').DataTable({
 	    	dom: 'Bfrtlip',
-    		buttons: [ 'copyHtml5','excelHtml5','pdfHtml5','csvHtml5' ],
+    		buttons: [ 'copyHtml5','excelHtml5','csvHtml5' ],
     	    data: jsonData,
     		"order": [1, 'asc'],
 	    });

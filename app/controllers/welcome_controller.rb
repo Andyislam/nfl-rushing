@@ -2,7 +2,9 @@
 
 class WelcomeController < ApplicationController
   def index
-	redis = Redis.new(host: "localhost")
+  	require 'open-uri'
+    require 'json'
+  	redis = Redis.new(host: "localhost")
     @cashed_json = cashed_json redis
     @col_headers = col_headers redis
     
@@ -13,8 +15,6 @@ class WelcomeController < ApplicationController
   end
 
   def cashed_json redis
-  	require 'open-uri'
-    require 'json'
 	if redis.get("data") == nil
   		headers = []
 
