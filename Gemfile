@@ -17,6 +17,7 @@ gem 'sass-rails', '>= 6'
 gem 'webpacker', '~> 4.0'
 gem 'pkg-config', '~> 1.1'
 gem 'jquery-rails'
+gem 'tzinfo-data'
 
 gem 'httparty', '~> 0.13.7'
 
