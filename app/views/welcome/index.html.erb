@@ -13,8 +13,8 @@
 </table>
 
 <script type="text/javascript">
+  var jsonData = <%= raw @source_json.to_json %>
 	$(document).ready( function () {
-		var jsonData = <%= raw @cashed_json.to_json %>
 	    var table =  $('#rushingYards').DataTable({
 	    	dom: 'Bfrtlip',
     		buttons: [ 'copyHtml5','excelHtml5','csvHtml5' ],

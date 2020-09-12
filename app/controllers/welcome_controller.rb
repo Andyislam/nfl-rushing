@@ -2,40 +2,23 @@
 
 class WelcomeController < ApplicationController
   def index
-  	require 'open-uri'
-    require 'json'
-  	redis = Redis.new(host: "localhost")
-    @cashed_json = cashed_json redis
-    @col_headers = col_headers redis
-    
+    @source_json = source_json
+
+    @source_json.map do |i|
+      i.keys.each_with_index do |v, index|
+        i[index] = i.delete(v)
+      end
+    end
+
+    @col_headers = col_headers source_json[0]
   end
 
-  def col_headers redis
-  	redis.get("headers").split(",")
+  def col_headers(record)
+    record.keys
   end
 
-  def cashed_json redis
-	if redis.get("data") == nil
-  		headers = []
-
-		begin
-	  		data = JSON.load(open('http://raw.githubusercontent.com/tsicareers/nfl-rushing/master/rushing.json').read)
-	  		data.map {|d|
-	  			d.keys.each_with_index do |k, index|
-	  				d[index] = d[k]
-	  				headers << k
-	  				d.delete(k)
-	  			end
-	  		}
-	  	rescue
-	  		data = {error: true}
-	  	end
-		redis.setex("headers", 300 , headers.uniq.join(","))
-
-		redis.setex("data", 300 , data.to_json)
-  	end
-	JSON.parse(redis.get("data"))
+  def source_json
+    response = HTTParty.get('http://raw.githubusercontent.com/tsicareers/nfl-rushing/master/rushing.json')
+    JSON.parse(response.body)
   end
 end
-
-

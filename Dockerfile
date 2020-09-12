@@ -1,24 +1,22 @@
-FROM ruby:2.7.1
+FROM ruby:2.7.1-alpine
 
-ENV BUNDLER_VERSION=2.1.4
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
 
-RUN gem install bundler -v 2.1.4
+RUN apk update && apk add --virtual build-dependencies sqlite-dev
+RUN apk add --no-cache build-base sqlite-libs
 
-RUN apt-get update -qq && apt-get install -y build-essential
-RUN apt-get install libsqlite3-dev
-RUN apt-get install -y libxml2-dev libxslt1-dev
-RUN apt-get install -y nodejs
-
+RUN bundle config build.nokogiri --use-system-libraries
+RUN gem install nokogiri
 
 
-COPY . /app
+EXPOSE 3000
+CMD ["rails", "server", "-b", "0.0.0.0"]
 
-WORKDIR /app
-
-COPY Gemfile Gemfile.lock ./
-
+COPY Gemfile /usr/src/app/
 RUN bundle install
 
-RUN chmod a+x ./entrypoints/docker-entrypoint.sh
+COPY . /usr/src/app
 
-ENTRYPOINT [ "./entrypoints/docker-entrypoint.sh" ]
+
+
